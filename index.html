@@ -16,111 +16,22 @@
 			data-auto-logout-link="false"
 			data-use-continue-as="false"
 		></div> -->
+		
+	
+	
 		<script>
-			async function statusChangeCallback(response) {
-				// Called with the results from FB.getLoginStatus().
-				console.log("statusChangeCallback");
-				console.log(response); // The current login status of the person.
-				const appId = "1506582276387543";
-				const appSecret = "b1cf333b7e61b0115309bd547cc4dfc2";
-				const accessToken = response?.authResponse?.accessToken;
-				const userId = response?.authResponse?.userID;
-
-				FB.api(`/${userId}/permissions`, "GET", function (permissionResponse) {
-					console.log("granted permission", permissionResponse);
-				});
-
-				FB.api(
-					`/${userId}/accounts?fields=name&access_token=${accessToken}`,
-					"GET",
-					async function (assigendPages) {
-						const allPages = assigendPages.data;
-
-						// select ma haldenu paryo
-
-						await Promise.all(
-							allPages.map(async (page) => {
-								const backendResponse = await fetch("https://grambellbackend.loca.lt/integration", {
-									method: "post",
-									headers: {
-										// firebase auth token
-										"x-client-id": "6aba4bef-456a-419b-b452-2b69dcd1c495",
-										"Content-Type": "application/json",
-										"Bypass-Tunnel-Reminder": "allow",
-									},
-									// body: JSON.stringify({ page, userId, accessToken }),
-									body: JSON.stringify({
-										provider: "FACEBOOK",
-										name: "Bibash Facebook",
-										config: { pageId: page.id, userId: userId, accessToken: accessToken },
-									}),
-								});
-								const data = await backendResponse.json();
-								console.log("data from backend", data);
-
-								// ${page name} has been integrated.
-
-								// FB.api(
-								// 	`/${data.config.id}/subscribed_apps?subscribed=message&access_token=${data.config.accessToken}`,
-								// 	"GET",
-								// 	function (instagramResponse) {
-								// 		console.log("instagram data", instagramResponse);
-								// 	}
-								// );
-							})
-						);
-					}
-				);
-				if (response.status === "connected") {
-					// Logged into your webpage and Facebook.
-					testAPI();
-				} else {
-					// Not logged into your webpage or we are unable to tell.
-					document.getElementById("status").innerHTML = "Please log " + "into this webpage.";
-				}
-			}
-
-			function checkLoginState() {
-				// Called when a person is finished with the Login Button.
-				FB.getLoginStatus(function (response) {
-					// See the onlogin handler
-					statusChangeCallback(response);
-				});
-			}
-
-			window.fbAsyncInit = function () {
-				FB.init({
-					appId: "343921607951637",
-					cookie: true, // Enable cookies to allow the server to access the session.
-					xfbml: true, // Parse social plugins on this webpage.
-					version: "v12.0", // Use this Graph API version for this call.
-				});
-
-				FB.getLoginStatus(function (response) {
-					// Called after the JS SDK has been initialized.
-					statusChangeCallback(response); // Returns the login status.
-				});
+			window.fbAsyncInit = function() {
+			  FB.init({
+				appId            : '343921607951637',
+				autoLogAppEvents : true,
+				xfbml            : true,
+				version          : 'v14.0'
+			  });
 			};
-
-			function testAPI() {
-				// Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-				console.log("Welcome!  Fetching your information.... ");
-				FB.api("/me", function (response) {
-					console.log("Successful login for: " + response.name);
-					document.getElementById("status").innerHTML = "Thanks for logging in, " + response.name + "!";
-				});
-			}
-		</script>
-
-		<fb:login-button
-			scope="public_profile,email,pages_messaging,pages_read_engagement,pages_show_list,pages_manage_metadata"
-			onlogin="checkLoginState();"
-		>
-		</fb:login-button>
-
-		<div id="status"></div>
-
-		<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+		  </script>
+		  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+			
+	
 	</body>
 </html>
 
