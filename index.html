@@ -33,6 +33,13 @@
      console.log('Welcome!  Fetching your information.... ',response);
     FB.api(`/${response.authResponse.userID}/permissions`, "GET", function (permissionResponse) {
 					console.log("granted permission", permissionResponse);
+					FB.api(
+					`/${userId}/accounts?fields=name&access_token=${accessToken}`,
+					"GET",
+					async function (assigendPages) {
+						const allPages = assigendPages.data;
+						console.log(assigendPages)
+					})
 				});
     } else {
      console.log('User cancelled login or did not fully authorize.');
