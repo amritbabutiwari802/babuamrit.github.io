@@ -34,7 +34,7 @@
     FB.api(`/${response.authResponse.userID}/permissions`, "GET", function (permissionResponse) {
 					console.log("granted permission", permissionResponse);
 					FB.api(
-					`/${userId}/accounts?fields=name&access_token=${accessToken}`,
+					`/${response.authResponse.userID}/accounts?fields=name&access_token=${response.authResponse.accessToken}`,
 					"GET",
 					async function (assigendPages) {
 						const allPages = assigendPages.data;
